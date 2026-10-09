@@ -101,7 +101,10 @@ const getLeadNotes = asyncHandler(async (req, res, next) => {
 
   const { skip, limit, buildMeta } = getPagination(req.query);
 
+  const accessFilter = await getAccessFilter(req.user);
+
   const query = {
+    ...accessFilter,
     type: 'note',
     'relatedTo.entityType': 'lead',
     'relatedTo.entityId': lead._id,

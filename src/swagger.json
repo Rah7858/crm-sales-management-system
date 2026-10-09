@@ -1941,29 +1941,27 @@
           "Auth"
         ],
         "summary": "Refresh access token",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "refreshToken"
-                ],
-                "properties": {
-                  "refreshToken": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
+        "security": [],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "refreshToken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The refresh token passed in an HTTP-only cookie"
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Refreshed"
+            "description": "Refreshed successfully"
+          },
+          "400": {
+            "description": "Refresh token is missing"
           },
           "401": {
-            "description": "Invalid refresh token"
+            "description": "Invalid or expired refresh token"
           }
         }
       }

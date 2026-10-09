@@ -61,7 +61,8 @@ const getCustomer = asyncHandler(async (req, res, next) => {
   const hasAccess = await canAccessRecord(req.user, customer);
   if (!hasAccess) return next(new AppError('You do not have permission to access this customer', 403));
 
-  const deals = await Deal.find({ customer: customer._id }).populate('assignedTo', 'name email');
+  const dealAccessFilter = await getAccessFilter(req.user);
+  const deals = await Deal.find({ customer: customer._id, ...dealAccessFilter }).populate('assignedTo', 'name email');
 
   sendResponse(res, 200, 'Customer fetched successfully', { customer, deals });
 });
