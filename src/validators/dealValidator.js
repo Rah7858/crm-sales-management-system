@@ -14,6 +14,7 @@ const createDealSchema = z.object({
     return !isNaN(date.getTime()) && date >= new Date(new Date().setHours(0, 0, 0, 0));
   }, { message: 'Invalid or past date' }),
   stage: z.enum(['qualification', 'discovery', 'proposal', 'negotiation', 'won', 'lost']).optional(),
+  lostReason: z.string().optional(),
   description: z.string().optional(),
   assignedTo: z.string().refine(objectIdRefine, 'Invalid assignee ID').optional(),
 }).strict().refine((data) => !('expectedRevenue' in data), {
@@ -53,7 +54,7 @@ const queryDealSchema = z.object({
   closingFrom: z.string().refine((val) => !isNaN(Date.parse(val))).optional(),
   closingTo: z.string().refine((val) => !isNaN(Date.parse(val))).optional(),
   status: z.enum(['open', 'closed']).optional(),
-  sortBy: z.string().optional(),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'dealName', 'dealValue', 'probability', 'expectedClosingDate', 'stage']).optional(),
   order: z.enum(['asc', 'desc']).optional(),
   page: z.string().regex(/^\d+$/).optional(),
   limit: z.string().regex(/^\d+$/).optional(),

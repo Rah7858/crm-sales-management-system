@@ -11,6 +11,7 @@ const sendResponse = require('./utils/sendResponse');
 const app = express();
 
 // Security HTTP headers
+app.set('trust proxy', 1); // Trust first proxy for Render rate-limiting
 app.use(helmet());
 
 // CORS config

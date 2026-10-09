@@ -14,11 +14,26 @@ const createDeal = async (data, user) => {
   const lead = await Lead.findById(data.lead);
   if (!lead) throw new AppError('Lead not found', 404);
 
+  const hasLeadAccess = await canAccessRecord(user, lead);
+  if (!hasLeadAccess) throw new AppError('You do not have permission to access this lead', 403);
+
   const customer = await Customer.findById(data.customer);
   if (!customer) throw new AppError('Customer not found', 404);
 
+  const hasCustomerAccess = await canAccessRecord(user, customer);
+  if (!hasCustomerAccess) throw new AppError('You do not have permission to access this customer', 403);
+
   if (customer.lead && customer.lead.toString() !== data.lead) {
     throw new AppError('Customer and Lead do not match appropriately', 400);
+  }
+
+  if (data.stage === 'lost' && (!data.lostReason || data.lostReason.trim() === '')) {
+    throw new AppError('A reason is required when a deal is lost', 400);
+  }
+
+  if (data.stage === 'won') {
+    if (!data.customer) throw new AppError('A won deal must have a valid customer', 400);
+    if (data.value <= 0) throw new AppError('A won deal must have a value greater than 0', 400);
   }
 
   let assignedTo = user._id;
@@ -158,6 +173,9 @@ const changeDealStage = async (id, data, user) => {
 const assignDeal = async (id, newAssigneeId, user) => {
   const deal = await Deal.findById(id);
   if (!deal) throw new AppError('Deal not found', 404);
+
+  const hasAccess = await canAccessRecord(user, deal);
+  if (!hasAccess) throw new AppError('You do not have permission to access this deal', 403);
 
   const assignee = await User.findOne({ _id: newAssigneeId, role: 'sales_executive', isActive: true });
   if (!assignee) throw new AppError('Assignee must be an active sales executive', 400);

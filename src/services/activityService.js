@@ -91,6 +91,10 @@ const updateActivity = async (id, data, user) => {
   // Check access to existing activity entity
   await verifyEntityAccess(activity.relatedTo.entityType, activity.relatedTo.entityId, user);
 
+  if (data.relatedTo && (data.relatedTo.entityType !== activity.relatedTo.entityType || data.relatedTo.entityId.toString() !== activity.relatedTo.entityId.toString())) {
+    await verifyEntityAccess(data.relatedTo.entityType, data.relatedTo.entityId, user);
+  }
+
   if (data.assignedTo && data.assignedTo !== activity.assignedTo.toString()) {
     if (user.role === 'admin' || user.role === 'sales_manager') {
       const assignee = await User.findOne({ _id: data.assignedTo, role: 'sales_executive', isActive: true });
@@ -105,6 +109,12 @@ const updateActivity = async (id, data, user) => {
     } else {
       throw new AppError('Executives cannot reassign activities to others', 403);
     }
+  }
+
+  if (data.status === 'completed' && activity.status !== 'completed') {
+    data.completedAt = new Date();
+  } else if (data.status === 'pending' && activity.status === 'completed') {
+    data.completedAt = null;
   }
 
   Object.assign(activity, data);

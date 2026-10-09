@@ -27,7 +27,7 @@ const queryCustomerSchema = z.object({
   assignedTo: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), { message: 'Invalid ID format' }).optional(),
   createdFrom: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }).optional(),
   createdTo: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }).optional(),
-  sortBy: z.string().optional(),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'name', 'email', 'company']).optional(),
   order: z.enum(['asc', 'desc']).optional(),
   page: z.string().regex(/^\d+$/).optional(),
   limit: z.string().regex(/^\d+$/).optional(),

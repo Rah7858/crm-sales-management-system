@@ -31,7 +31,7 @@ const seedDB = async () => {
       let existingUser = await User.findOne({ email: u.email });
       if (!existingUser) {
         existingUser = await User.create(u);
-        console.log(`Created: ${u.email} / ${u.password}`);
+        console.log(`Created: ${u.email} (Role: ${u.role})`);
       } else {
         console.log(`Already exists: ${u.email}`);
       }
@@ -63,7 +63,7 @@ const seedDB = async () => {
       let existingExec = await User.findOne({ email: exec.email });
       if (!existingExec) {
         await User.create(exec);
-        console.log(`Created: ${exec.email} / ${exec.password}`);
+        console.log(`Created: ${exec.email} (Role: ${exec.role})`);
       } else {
         console.log(`Already exists: ${exec.email}`);
       }

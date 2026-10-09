@@ -19,15 +19,21 @@ const getActivities = asyncHandler(async (req, res, next) => {
   const query = { ...accessFilter }; // Assumes Activity has assignedTo field directly
 
   if (type) query.type = type;
-  if (status) query.status = status;
   if (assignedTo) query.assignedTo = assignedTo;
   if (entityType) query['relatedTo.entityType'] = entityType;
   if (entityId) query['relatedTo.entityId'] = entityId;
-
   if (dueFrom || dueTo) {
     query.dueDate = {};
     if (dueFrom) query.dueDate.$gte = new Date(dueFrom);
     if (dueTo) query.dueDate.$lte = new Date(dueTo);
+  }
+
+  if (status === 'overdue') {
+    query.status = 'pending';
+    query.dueDate = query.dueDate || {};
+    query.dueDate.$lt = new Date();
+  } else if (status) {
+    query.status = status;
   }
 
   let sortOptions = { createdAt: -1 };

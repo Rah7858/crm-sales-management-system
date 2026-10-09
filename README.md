@@ -16,7 +16,7 @@ A robust, role-based CRM backend application built for managing sales leads, cus
 
 - **Runtime:** Node.js
 - **Framework:** Express.js 5.x
-- **Database:** MongoDB Atlas & Mongoose 8.x
+- **Database:** MongoDB Atlas & Mongoose 9.x
 - **Validation:** Zod
 - **Authentication:** jsonwebtoken (JWT), bcryptjs, cookie-parser
 - **Security & Logging:** helmet, cors, express-rate-limit, morgan
@@ -60,7 +60,7 @@ Copy `.env.example` to `.env` in the root of the project:
 
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/crm?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/crm?retryWrites=true&w=majority
 JWT_ACCESS_SECRET=your_jwt_access_secret
 JWT_REFRESH_SECRET=your_jwt_refresh_secret
 JWT_ACCESS_EXPIRES=15m

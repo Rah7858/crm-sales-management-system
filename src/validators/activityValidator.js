@@ -30,14 +30,14 @@ const updateActivitySchema = z.object({
 }).strict();
 
 const queryActivitySchema = z.object({
-  type: z.string().optional(),
-  status: z.string().optional(),
+  type: z.enum(['call', 'email', 'meeting', 'demo', 'follow_up', 'reminder', 'note', 'task']).optional(),
+  status: z.enum(['pending', 'completed', 'overdue']).optional(),
   assignedTo: z.string().refine(objectIdRefine).optional(),
-  entityType: z.string().optional(),
+  entityType: z.enum(['lead', 'customer', 'deal', 'user']).optional(),
   entityId: z.string().refine(objectIdRefine).optional(),
   dueFrom: z.string().refine((val) => !isNaN(Date.parse(val))).optional(),
   dueTo: z.string().refine((val) => !isNaN(Date.parse(val))).optional(),
-  sortBy: z.string().optional(),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'dueDate', 'title', 'status']).optional(),
   order: z.enum(['asc', 'desc']).optional(),
   page: z.string().regex(/^\d+$/).optional(),
   limit: z.string().regex(/^\d+$/).optional(),
