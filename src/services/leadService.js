@@ -179,7 +179,7 @@ const addNoteToLead = async (id, text, user) => {
   });
 
   await logEvent({
-    action: 'note_added',
+    action: 'lead_note_added',
     entityType: 'lead',
     entityId: lead._id,
     performedBy: user._id,

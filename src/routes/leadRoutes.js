@@ -13,6 +13,7 @@ const {
 const authenticate = require('../middleware/authenticate');
 const authorize = require('../middleware/authorize');
 const validate = require('../middleware/validate');
+const { convertLead } = require('../controllers/conversionController');
 const {
   createLeadSchema,
   updateLeadSchema,
@@ -20,12 +21,15 @@ const {
   assignLeadSchema,
   noteLeadSchema,
   queryLeadSchema,
+  convertLeadSchema,
 } = require('../validators/leadValidator');
 const { objectIdSchema } = require('../validators/authValidator');
 
 const router = express.Router();
 
 router.use(authenticate);
+
+router.post('/:id/convert', validate(objectIdSchema, 'params'), validate(convertLeadSchema), convertLead);
 
 router.post('/', validate(createLeadSchema), createLead);
 router.get('/', validate(queryLeadSchema, 'query'), getLeads);

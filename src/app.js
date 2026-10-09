@@ -45,6 +45,16 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const timelineRoutes = require('./routes/timelineRoutes');
 const leadRoutes = require('./routes/leadRoutes');
+const customerRoutes = require('./routes/customerRoutes');
+const dealRoutes = require('./routes/dealRoutes');
+const activityRoutes = require('./routes/activityRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Health check route
 app.get('/api/health', (req, res) => {
@@ -56,6 +66,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/timeline', timelineRoutes);
 app.use('/api/leads', leadRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/deals', dealRoutes);
+app.use('/api/activities', activityRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // 404 handler for unknown routes
 app.use((req, res, next) => {

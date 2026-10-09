@@ -7,7 +7,8 @@ const errorHandler = (err, req, res, next) => {
 
   // Zod Validation Error
   if (err.name === 'ZodError') {
-    const messages = err.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const issues = err.issues || err.errors || [];
+    const messages = issues.map((e) => `${e.path ? e.path.join('.') : 'Field'}: ${e.message}`);
     error = new AppError('Validation Error', 400);
     error.errors = messages;
   }

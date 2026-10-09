@@ -50,6 +50,17 @@ const queryLeadSchema = z.object({
   limit: z.string().regex(/^\d+$/).optional(),
 });
 
+const convertLeadSchema = z.object({
+  dealName: z.string().min(2, 'Deal name is required'),
+  dealValue: z.number().positive('Deal value must be greater than 0'),
+  probability: z.number().min(0).max(100, 'Probability must be between 0 and 100'),
+  expectedClosingDate: z.string().refine((val) => {
+    const date = new Date(val);
+    return !isNaN(date.getTime()) && date >= new Date(new Date().setHours(0,0,0,0));
+  }, { message: 'Invalid or past date' }),
+  description: z.string().optional(),
+});
+
 module.exports = {
   createLeadSchema,
   updateLeadSchema,
@@ -57,4 +68,5 @@ module.exports = {
   assignLeadSchema,
   noteLeadSchema,
   queryLeadSchema,
+  convertLeadSchema,
 };
