@@ -33,17 +33,7 @@ router.post('/:id/convert', validate(objectIdSchema, 'params'), validate(convert
 
 router.post('/', validate(createLeadSchema), createLead);
 router.get('/', validate(queryLeadSchema, 'query'), getLeads);
-router.get(
-  '/:id',
-  (req, res, next) => {
-    console.log(
-      `[DIAGNOSTIC-ROUTE] method=${req.method} originalUrl="${req.originalUrl}" paramsId="${req.params.id}" length=${req.params.id ? req.params.id.length : 'undefined'}`
-    );
-    next();
-  },
-  validate(objectIdSchema, 'params'),
-  getLead
-);
+router.get('/:id', validate(objectIdSchema, 'params'), getLead);
 router.put('/:id', validate(objectIdSchema, 'params'), validate(updateLeadSchema), updateLead);
 router.patch('/:id/status', validate(objectIdSchema, 'params'), validate(statusLeadSchema), updateLeadStatus);
 router.patch('/:id/assign', authorize('admin', 'sales_manager'), validate(objectIdSchema, 'params'), validate(assignLeadSchema), assignLead);

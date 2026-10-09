@@ -58,9 +58,6 @@ const getLeads = asyncHandler(async (req, res, next) => {
 });
 
 const getLead = asyncHandler(async (req, res, next) => {
-  console.log(
-    `[DIAGNOSTIC] req.params.id: "${req.params.id}" | length: ${req.params.id.length} | hex: ${Buffer.from(req.params.id).toString('hex')}`
-  );
   const lead = await Lead.findById(req.params.id).populate('assignedTo', 'name email');
   if (!lead) return next(new AppError('Lead not found', 404));
 
