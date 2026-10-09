@@ -57,12 +57,16 @@ const createActivity = async (data, user) => {
     }
   }
 
+  const activityStatus = data.status || 'pending';
+  const completedAt = activityStatus === 'completed' ? new Date() : undefined;
+
   const activity = await Activity.create({
     type: data.type,
     title: data.title,
     description: data.description,
     dueDate: data.dueDate,
-    status: data.status || 'pending',
+    status: activityStatus,
+    completedAt,
     assignedTo,
     createdBy: user._id,
     relatedTo: {

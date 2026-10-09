@@ -34,6 +34,7 @@ const createDeal = async (data, user) => {
   if (data.stage === 'won') {
     if (!data.customer) throw new AppError('A won deal must have a valid customer', 400);
     if (data.value <= 0) throw new AppError('A won deal must have a value greater than 0', 400);
+    data.probability = 100;
   }
 
   let assignedTo = user._id;
@@ -95,7 +96,11 @@ const updateDeal = async (id, data, user) => {
 
   Object.assign(deal, data);
 
-  if (data.value !== undefined || data.probability !== undefined) {
+  if (deal.stage === 'won') {
+    deal.probability = 100;
+  }
+
+  if (data.value !== undefined || data.probability !== undefined || deal.stage === 'won') {
     deal.expectedRevenue = (deal.value * deal.probability) / 100;
   }
 
@@ -132,6 +137,8 @@ const changeDealStage = async (id, data, user) => {
   if (stage === 'won') {
     if (!deal.customer) throw new AppError('A won deal must have a valid customer', 400);
     if (deal.value <= 0) throw new AppError('A won deal must have a value greater than 0', 400);
+    deal.probability = 100;
+    deal.expectedRevenue = deal.value;
   }
 
   deal.stage = stage;
