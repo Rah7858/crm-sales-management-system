@@ -53,8 +53,13 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
-// Swagger Documentation
+// Swagger Documentation UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Swagger JSON specification
+app.get('/api-docs.json', (req, res) => {
+  res.json(swaggerDocument);
+});
 
 // Health check route
 app.get('/api/health', (req, res) => {

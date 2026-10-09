@@ -7,7 +7,7 @@ const doc = {
     version: "1.0.0",
     description: "API Documentation for the CRM backend"
   },
-  servers: [{ url: "http://localhost:5000" }],
+  servers: [{ url: "/" }],
   components: {
     securitySchemes: {
       bearerAuth: {
